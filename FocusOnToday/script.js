@@ -1,31 +1,43 @@
-// const checkBoxList = document.querySelectorAll(".custom-checkbox");
-// const errorLabel = document.querySelector(".erroe-lebel");
+ const checkBoxList = document.querySelectorAll(".custom-checkbox");
+const inputFields = document.querySelectorAll(".goal-input");
+const errorLabel = document.querySelector(".erroe-lebel");
+const progressValue = document.querySelector(".progress-value");
+const progressText = progressValue.querySelector("p");
 
-// checkBoxList.forEach((checkbox) => {
-//   checkbox.addEventListener("click", () => {
-//     const goalContainer = checkbox.parentElement;
-//     const input = goalContainer.querySelector(".goal-input");
+let completedCount = 0;
 
-//     if (input.value !== "") {
-//       goalContainer.classList.toggle("completed");
-//       errorLabel.style.display = "none";
-//     } else {
-//       errorLabel.style.display = "block";
-//     }
-//   });
-// });
+checkBoxList.forEach((checkbox) => {
+  checkbox.addEventListener("click", () => {
 
+    const allGoalsAdded = Array.from(inputFields).every(input => {
+      return input.value.trim() !== "";
+    });
 
-const checkBoxList = document.querySelectorAll(".custom-checkbox")
-const inputFields = document.querySelectorAll(".goal-input")
+    if (!allGoalsAdded) {
+      errorLabel.style.display = "block";
+      return;
+    }
 
-checkBoxList.forEach((checkbox)=>{ 
-      checkbox.addEventListener("click",(e)=>{
-        const allFieldsFilled = {...inputFields}.every(function(input){
-          return input.value
-        })
-        if(allFieldsFilled){ 
-        checkbox.parentElement.classList.toggle("completed") 
-        }
-      })
-})
+    errorLabel.style.display = "none";
+
+    const parent = checkbox.parentElement;
+
+    if (parent.classList.contains("completed")) {
+      parent.classList.remove("completed");
+      completedCount--;
+    } else {
+      parent.classList.add("completed");
+      completedCount++;
+    }
+
+    const progressPercent = (completedCount / inputFields.length) * 100;
+    progressValue.style.width = `${progressPercent}%`;
+    progressText.textContent = `${completedCount}/${inputFields.length} Completed`;
+  });
+});
+
+inputFields.forEach((input) => {
+  input.addEventListener("input", () => {
+    errorLabel.style.display = "none";
+  });
+});

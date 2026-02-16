@@ -45,9 +45,10 @@ h2{
 }
 .progress-value{
     height: 30px;
-    width: 30%;
+    width: 0%;
     background-color: #48A300;
     border-radius: 15px;
+    overflow: hidden;
 }
 .progress-value, p{
         font-size: 10px;
